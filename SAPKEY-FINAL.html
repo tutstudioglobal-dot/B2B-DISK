@@ -1599,13 +1599,15 @@ setTimeout(function(){
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 <script>
 // ===== SMART CLOUDINARY AUTO-UPLOAD =====
-var clCloudName = localStorage.getItem('sapkey_cl_cloud') || 'demo';
-var clPreset = localStorage.getItem('sapkey_cl_preset') || 'unsigned_preset';
-function setCloudinaryConfig(cloud, preset) { clCloudName = cloud; clPreset = preset; localStorage.setItem('sapkey_cl_cloud', cloud); localStorage.setItem('sapkey_cl_preset', preset); }
+var clCloudName = localStorage.getItem('sapkey_cl_cloud') || '';
+var clPreset = localStorage.getItem('sapkey_cl_preset') || '';
+var clFolder = localStorage.getItem('sapkey_cl_folder') || 'b2b_disk';
+function setCloudinaryConfig(cloud, preset, folder) { clCloudName = cloud; clPreset = preset; if (folder) clFolder = folder; localStorage.setItem('sapkey_cl_cloud', cloud); localStorage.setItem('sapkey_cl_preset', preset); localStorage.setItem('sapkey_cl_folder', folder || 'b2b_disk'); }
 function uploadToCloudinary(dataUrl, callback) {
   var formData = new FormData();
   formData.append('file', dataUrl);
   formData.append('upload_preset', clPreset);
+  if (clFolder) formData.append('folder', clFolder);
   fetch('https://api.cloudinary.com/v1_1/' + clCloudName + '/upload', { method: 'POST', body: formData })
     .then(function(r) { return r.json(); })
     .then(function(d) { if (d.secure_url) { callback(null, d.secure_url); } else { callback('Upload failed'); } })
@@ -1973,7 +1975,8 @@ function renderSupabaseSettings() {
     '<div style="display:flex;gap:4px;flex-wrap:wrap">' +
     '<input id="clCloudInp" type="text" value="' + clCloudName + '" style="flex:1;min-width:80px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:9px" placeholder="Cloud name">' +
     '<input id="clPresetInp" type="text" value="' + clPreset + '" style="flex:1;min-width:80px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:9px" placeholder="Upload preset">' +
-    '<button class="scr-bn bl" onclick="var c=document.getElementById(\'clCloudInp\').value.trim(),p=document.getElementById(\'clPresetInp\').value.trim();if(c&&p){setCloudinaryConfig(c,p);showToast(T(\'✅ تم حفظ إعدادات Cloudinary\',\'✅ Cloudinary saved\'));}" style="padding:5px 8px;font-size:9px;min-width:auto">' + T('حفظ', 'Save') + '</button></div></div>' +
+    '<input id="clFolderInp" type="text" value="' + clFolder + '" style="flex:1;min-width:60px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:9px" placeholder="Folder">' +
+    '<button class="scr-bn bl" onclick="var c=document.getElementById(\'clCloudInp\').value.trim(),p=document.getElementById(\'clPresetInp\').value.trim(),f=document.getElementById(\'clFolderInp\').value.trim();if(c&&p){setCloudinaryConfig(c,p,f);showToast(T(\'✅ تم حفظ إعدادات Cloudinary\',\'✅ Cloudinary saved\'));}" style="padding:5px 8px;font-size:9px;min-width:auto">' + T('حفظ', 'Save') + '</button></div></div>' +
     '<div style="margin-top:8px;padding:8px;background:var(--bg3);border-radius:8px">' +
     '<div style="font-size:9px;font-weight:700;margin-bottom:6px">' + T('📊 حالة قاعدة البيانات', '📊 DB Status') + '</div>' +
     '<div style="font-size:8px;color:var(--text2);line-height:1.8">' +
