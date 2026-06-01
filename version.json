@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "buildDate": "2026-06-01",
+  "releaseNotes": {
+    "ar": "الإصدار الأساسي - نظام SAPKEY ERP",
+    "en": "Base release - SAPKEY ERP System"
+  },
+  "forceUpdate": false,
+  "minVersion": "1.0.0",
+  "updateUrl": "SAPKEY-FINAL.html"
+}
