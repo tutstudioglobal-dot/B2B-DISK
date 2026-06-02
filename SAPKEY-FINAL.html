@@ -871,7 +871,7 @@ function handleLogin() {
   if (!user) { showLoginError('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة'); return; }
   currentUser = user;
   localStorage.setItem('sapkey_user', JSON.stringify(user));
-  document.getElementById('loginScreen').classList.remove('show');
+  var ls=document.getElementById('loginScreen');ls.classList.remove('show');ls.style.display='';
   document.getElementById('app').classList.add('show');
   updateUserUI();
   showToast('✅ مرحباً ' + user.name);
@@ -1027,7 +1027,7 @@ function handleForgotPass() {
     try { currentUser = JSON.parse(saved); } catch(e) {}
   }
   if (currentUser) {
-    document.getElementById('loginScreen').classList.remove('show');
+    var ls=document.getElementById('loginScreen');ls.classList.remove('show');ls.style.display='';
   document.getElementById('app').classList.add('show');
     updateUserUI();
   } else {
@@ -1049,7 +1049,7 @@ function liveSyncData(){showToast(T('جاري مزامنة البيانات...',
 // ===== ONBOARDING =====
 function nextOb(){obStep++;if(obStep>3){finishOb();return;}var c=document.getElementById('obC');if(c){c.scrollTo({left:obStep*c.clientWidth,behavior:'smooth'});}var ds=document.querySelectorAll('.obdd');for(var i=0;i<ds.length;i++)ds[i].classList.toggle('ac',i===obStep);var sk=document.getElementById('obSk'),nx=document.getElementById('obNx');if(sk)sk.textContent=T('تخطي','Skip');if(nx)nx.textContent=obStep>2?T('ابدأ','Start'):T('تالي','Next');}
 function skipOb(){finishOb();}
-function finishOb(){ensureAppShown();var ob=document.getElementById('ob');if(!ob)return;ob.classList.add('hide');setTimeout(function(){ob.style.display='none';},400);}
+function finishOb(){ensureAppShown();var ob=document.getElementById('ob');if(!ob)return;ob.style.display='none';document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
 function initOB(){var sk=document.getElementById('obSk'),nx=document.getElementById('obNx'),c=document.getElementById('obC');if(sk)sk.onclick=function(){skipOb();};if(nx)nx.onclick=function(){nextOb();};if(c){c.onscroll=function(){var idx=Math.round(c.scrollLeft/c.clientWidth);if(idx!==obStep&&idx>=0&&idx<=3){obStep=idx;var ds=document.querySelectorAll('.obdd');for(var i=0;i<ds.length;i++)ds[i].classList.toggle('ac',i===obStep);var sk2=document.getElementById('obSk'),nx2=document.getElementById('obNx');if(sk2)sk2.textContent=T('تخطي','Skip');if(nx2)nx2.textContent=obStep>2?T('ابدأ','Start'):T('تالي','Next');}};}}if(document.readyState==='complete'||document.readyState==='interactive'){initOB();}else{document.addEventListener('DOMContentLoaded',initOB);}
 
 // ===== TODAY TASKS =====
@@ -1764,7 +1764,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 var supabaseClient = null;
 var supabaseConnected = false;
 var dbMode = localStorage.getItem('sapkey_db_mode') || 'local';
-(function(){var u=localStorage.getItem('sapkey_supabase_url');var k=localStorage.getItem('sapkey_supabase_key');if(!u)localStorage.setItem('sapkey_supabase_url',SUPABASE_URL);if(!k)localStorage.setItem('sapkey_supabase_key',SUPABASE_ANON_KEY);if(supabaseClient===null&&(u||SUPABASE_URL)&&(k||SUPABASE_ANON_KEY)){try{initSupabase(u||SUPABASE_URL,k||SUPABASE_ANON_KEY);}catch(e){}}})();
+(function(){var u=localStorage.getItem('sapkey_supabase_url');var k=localStorage.getItem('sapkey_supabase_key');if(!u)localStorage.setItem('sapkey_supabase_url',SUPABASE_URL);if(!k)localStorage.setItem('sapkey_supabase_key',SUPABASE_ANON_KEY);})();
 var syncQueue = [];
 function enqueueSync(table, data) { syncQueue.push({ table: table, data: data, ts: Date.now() }); if (syncQueue.length >= 10) flushSync(); }
 function flushSync() {
