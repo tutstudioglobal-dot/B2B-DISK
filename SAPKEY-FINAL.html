@@ -1391,6 +1391,21 @@ function doWizardConfirm(order, type, inpId, skipStep, statuses) {
 }
 
 // ===== DS STEP META =====
+var DS_STEPS = [
+  { label: 'طلب شراء', icon: 'fa-file-invoice', desc: 'إصدار طلب شراء رسمي' },
+  { label: 'اعتماد طلب', icon: 'fa-check-circle', desc: 'اعتماد طلب الشراء' },
+  { label: 'طلبات عروض', icon: 'fa-file-export', desc: 'إرسال طلبات عروض الأسعار' },
+  { label: 'تحليل عروض', icon: 'fa-chart-bar', desc: 'تحليل العروض الفنية والمالية' },
+  { label: 'اختيار مورد', icon: 'fa-hand-pointer', desc: 'اختيار المورد الفائز' },
+  { label: 'إصدار أمر', icon: 'fa-file-contract', desc: 'إصدار أمر التوريد' },
+  { label: 'اعتماد أمر', icon: 'fa-stamp', desc: 'اعتماد أمر التوريد' },
+  { label: 'توريد', icon: 'fa-truck', desc: 'توريد المواد والمعدات' },
+  { label: 'فحص فني', icon: 'fa-search', desc: 'فحص الكميات والجودة' },
+  { label: 'استلام', icon: 'fa-clipboard-check', desc: 'إذن استلام نهائي' },
+  { label: 'صرف', icon: 'fa-money-bill-wave', desc: 'صرف قيمة التوريد' },
+  { label: 'إغلاق', icon: 'fa-check-double', desc: 'إغلاق وأرشفة' }
+];
+var DS_STATUSES = ['طلب شراء', 'معتمد', 'عروض', 'تحليل', 'اختيار', 'أمر توريد', 'اعتماد', 'توريد', 'فحص فني', 'استلام', 'صرف', 'مكتمل ✅'];
 DS_STEPS[0].meta = { input: 'قيمة التوريد التقديرية (ج.م):', field: 'amount', numeric: true, placeholder: 'مثال: 150000', req: 'تحديد القيمة التقديرية ورقم طلب الشراء', warn: 'يجب اعتماد الطلب قبل المتابعة', detail: 'قم بإدخال طلب الشراء الرسمي مع تحديد القيمة التقديرية ورقم مرجع الطلب. يتم إرسال الطلب للإدارة للاعتماد.' };
 DS_STEPS[1].meta = { detail: 'تم إرسال طلب الشراء للإدارة. يتم الآن مراجعة الطلب واعتماده رسمياً للبدء في إجراءات التوريد.', req: 'موافقة الإدارة على طلب الشراء' };
 DS_STEPS[2].meta = { input: 'ملاحظات تحليل العروض:', field: 'notes', placeholder: 'أفضل العروض المستلمة...', detail: 'يتم إرسال طلبات عروض أسعار للموردين المعتمدين. بعد استلام العروض، يتم تحليلها ومقارنتها.', req: 'استلام 3 عروض أسعار على الأقل', warn: 'تأكد من تغطية جميع البنود الفنية' };
