@@ -878,7 +878,7 @@ function handleLogin() {
   currentUser = user;
   localStorage.setItem('sapkey_user', JSON.stringify(user));
   var ls=document.getElementById('loginScreen');ls.classList.remove('show');ls.style.display='';
-  document.getElementById('app').classList.add('show');
+  var ap=document.getElementById('app');ap.style.display='';ap.classList.add('show');
   updateUserUI();
   showToast('✅ مرحباً ' + user.name);
   render();
@@ -1034,7 +1034,7 @@ function handleForgotPass() {
   }
   if (currentUser) {
     var ls=document.getElementById('loginScreen');ls.classList.remove('show');ls.style.display='';
-  document.getElementById('app').classList.add('show');
+    var ap=document.getElementById('app');ap.style.display='';ap.classList.add('show');
     updateUserUI();
   } else {
     document.getElementById('app').classList.remove('show');
