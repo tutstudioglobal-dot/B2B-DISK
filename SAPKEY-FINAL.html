@@ -10,6 +10,7 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%230B0E11'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-family='sans-serif' font-size='100' font-weight='900' fill='url(%23g)'%3ES%3C/text%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='192' y2='192'%3E%3Cstop offset='0' stop-color='%230ECB81'/%3E%3Cstop offset='1' stop-color='%231E80FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%230B0E11'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-family='sans-serif' font-size='100' font-weight='900' fill='url(%23g)'%3ES%3C/text%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='192' y2='192'%3E%3Cstop offset='0' stop-color='%230ECB81'/%3E%3Cstop offset='1' stop-color='%231E80FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E">
 <title>SAPKEY CREATIVE SYSTEMS© — النظام المتكامل</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -846,6 +847,8 @@ function IC(c){
 }
 function showModal(t,b){document.getElementById('mT').textContent=t;document.getElementById('mB').innerHTML=b;document.getElementById('modal').classList.add('show');}
 function closeModal(){document.getElementById('modal').classList.remove('show');}
+var _inputCallback=null;
+function showInputModal(label,val,cb){_inputCallback=cb;showModal(label,'<div class="ml-f"><input id="inputModalField" type="text" value="'+(val||'')+'" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit"></div><div class="ml-b"><button class="scr-bn sc" onclick="closeModal()">'+T('إلغاء','Cancel')+'</button><button class="scr-bn pr" onclick="var v=document.getElementById(\'inputModalField\').value.trim();closeModal();if(_inputCallback)_inputCallback(v||null)">'+T('موافق','OK')+'</button></div>');setTimeout(function(){try{document.getElementById('inputModalField').focus();}catch(e){}},100);}
 function closeScr(){document.getElementById('sc').classList.remove('show');}
 function SECT(){return SECTIONS;}
 function ensureAppShown(){var app=document.getElementById('app');if(currentUser&&!app.classList.contains('show')){app.classList.add('show');}}
@@ -1534,6 +1537,12 @@ function showDSDetail(id) {
     }
   }
 }
+
+// ===== DS ORDERS (Direct Supply) =====
+var dsOrders = JSON.parse(localStorage.getItem('sapkey_ds_orders') || '[]');
+function getDSOrders() { dsOrders = JSON.parse(localStorage.getItem('sapkey_ds_orders') || '[]'); return dsOrders; }
+function saveDSOrders() { localStorage.setItem('sapkey_ds_orders', JSON.stringify(dsOrders)); }
+function genDSId() { return 'DS-' + String(Date.now()).slice(-5) + String(dsOrders.length + 1).padStart(3, '0'); }
 
 // ===== TENDER WORKFLOW =====
 var tenders = JSON.parse(localStorage.getItem('sapkey_tenders') || '[]');
