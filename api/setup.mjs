@@ -9,8 +9,9 @@ export default async function handler(req, res) {
   if (!password) return res.status(400).json({ error: 'Missing SUPABASE_DB_PASSWORD' });
 
   const projectRef = 'ehdxisutvrqqfiozarxq';
-  // Use pooler for IPv4 support (Supabase DB is IPv6-only)
-  const connectionString = `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres`;
+  // Use pooler with reference option for IPv4 support (Supabase DB is IPv6-only)
+  const encodedRef = encodeURIComponent(projectRef);
+  const connectionString = `postgresql://postgres:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?options=reference%3D${encodedRef}`;
 
   const results = [];
 

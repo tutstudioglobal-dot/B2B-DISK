@@ -22,8 +22,8 @@ async function setup() {
     process.exit(1);
   }
 
-  // Use pooler for IPv4 support (Supabase DB is IPv6-only)
-  const connStr = `postgresql://postgres.ehdxisutvrqqfiozarxq:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres`;
+  // Use pooler with reference option for IPv4 support (Supabase DB is IPv6-only)
+  const connStr = `postgresql://postgres:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?options=reference%3Dehdxisutvrqqfiozarxq`;
   const results = [];
 
   // Step 1: Connect
