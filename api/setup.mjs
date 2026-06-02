@@ -10,12 +10,13 @@ export default async function handler(req, res) {
 
   const projectRef = 'ehdxisutvrqqfiozarxq';
   // Use pooler for IPv4 support (Supabase DB is IPv6-only)
-  const connectionString = `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require`;
+  const connectionString = `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres`;
 
   const results = [];
 
   try {
-    const client = new Client({ connectionString, connectionTimeoutMillis: 15000 });
+    // Need rejectUnauthorized:false for Supabase pooler self-signed cert
+    const client = new Client({ connectionString, connectionTimeoutMillis: 15000, ssl: { rejectUnauthorized: false } });
     await client.connect();
     results.push({ step: 'connect', status: 'ok' });
 

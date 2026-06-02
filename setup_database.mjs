@@ -23,12 +23,12 @@ async function setup() {
   }
 
   // Use pooler for IPv4 support (Supabase DB is IPv6-only)
-  const connStr = `postgresql://postgres.ehdxisutvrqqfiozarxq:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require`;
+  const connStr = `postgresql://postgres.ehdxisutvrqqfiozarxq:${encodeURIComponent(password)}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres`;
   const results = [];
 
   // Step 1: Connect
   console.log('Connecting to Supabase...');
-  const client = new pg.Client({ connectionString: connStr, connectionTimeoutMillis: 20000 });
+  const client = new pg.Client({ connectionString: connStr, connectionTimeoutMillis: 20000, ssl: { rejectUnauthorized: false } });
   await client.connect();
   console.log('Connected!');
   results.push('✅ Connected');
