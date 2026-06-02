@@ -31,23 +31,24 @@ export default async function handler(req, res) {
     `);
     results.push({ step: 'create_tables', status: 'ok' });
 
-    // 2. Enable RLS + policies
+    // 2. Enable RLS + policies (idempotent)
     await execSQL(`
-      ALTER TABLE products_v2 ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE customers_v2 ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE suppliers_v2 ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE coa_v2 ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE ds_orders_v2 ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE IF EXISTS products_v2 ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE IF EXISTS customers_v2 ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE IF EXISTS suppliers_v2 ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE IF EXISTS coa_v2 ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE IF EXISTS ds_orders_v2 ENABLE ROW LEVEL SECURITY;
+      DROP POLICY IF EXISTS "anon_all_products" ON products_v2;
+      DROP POLICY IF EXISTS "anon_all_customers" ON customers_v2;
+      DROP POLICY IF EXISTS "anon_all_suppliers" ON suppliers_v2;
+      DROP POLICY IF EXISTS "anon_all_coa" ON coa_v2;
+      DROP POLICY IF EXISTS "anon_all_ds_orders" ON ds_orders_v2;
       CREATE POLICY "anon_all_products" ON products_v2 FOR ALL USING (true) WITH CHECK (true);
       CREATE POLICY "anon_all_customers" ON customers_v2 FOR ALL USING (true) WITH CHECK (true);
       CREATE POLICY "anon_all_suppliers" ON suppliers_v2 FOR ALL USING (true) WITH CHECK (true);
       CREATE POLICY "anon_all_coa" ON coa_v2 FOR ALL USING (true) WITH CHECK (true);
       CREATE POLICY "anon_all_ds_orders" ON ds_orders_v2 FOR ALL USING (true) WITH CHECK (true);
-      GRANT ALL ON products_v2 TO anon;
-      GRANT ALL ON customers_v2 TO anon;
-      GRANT ALL ON suppliers_v2 TO anon;
-      GRANT ALL ON coa_v2 TO anon;
-      GRANT ALL ON ds_orders_v2 TO anon;
+      GRANT ALL ON ALL TABLES IN SCHEMA public TO anon;
       GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO anon;
     `);
     results.push({ step: 'rls_policies', status: 'ok' });
