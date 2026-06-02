@@ -1100,7 +1100,10 @@ function showScanWizardV2(){
       b+='<button class="scr-bn sc" onclick="closeModal()">'+T('إغلاق','Close')+'</button></div></div>';
       showModal(T('مسح المستندات الاحترافي','Professional Document Scan'),sh+b);
     });
+    return;
   }
+  showModal(T('مسح المستندات الاحترافي','Professional Document Scan'),sh+b);
+}
 function handleDrop(e){
   e.preventDefault();document.getElementById('dz').classList.remove('drag');
   var files=e.dataTransfer.files;if(!files||!files.length)return;
@@ -1756,9 +1759,12 @@ function uploadScanDocs(callback) {
 }
 
 // ===== SUPABASE SMART SYNC (MongoDB style — local-first, batched, minimal) =====
+var SUPABASE_URL = 'https://ehdxisutvrqqfiozarxq.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoZHhpc3V0dnJxcWZpb3phcnhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMzQ5NDIsImV4cCI6MjA5NTkxMDk0Mn0.lyiPMWDVJWTuHnqLPQ6810pbOToQRTZLcXfKCFz3V5o';
 var supabaseClient = null;
 var supabaseConnected = false;
 var dbMode = localStorage.getItem('sapkey_db_mode') || 'local';
+(function(){var u=localStorage.getItem('sapkey_supabase_url');var k=localStorage.getItem('sapkey_supabase_key');if(!u)localStorage.setItem('sapkey_supabase_url',SUPABASE_URL);if(!k)localStorage.setItem('sapkey_supabase_key',SUPABASE_ANON_KEY);if(supabaseClient===null&&(u||SUPABASE_URL)&&(k||SUPABASE_ANON_KEY)){try{initSupabase(u||SUPABASE_URL,k||SUPABASE_ANON_KEY);}catch(e){}}})();
 var syncQueue = [];
 function enqueueSync(table, data) { syncQueue.push({ table: table, data: data, ts: Date.now() }); if (syncQueue.length >= 10) flushSync(); }
 function flushSync() {
