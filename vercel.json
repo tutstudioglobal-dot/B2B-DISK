@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "SAPKEY-FINAL.html", "use": "@vercel/static" },
+    { "src": "api/setup.mjs", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/SAPKEY-FINAL.html" },
+    { "src": "/api/setup", "dest": "/api/setup.mjs" }
+  ]
+}
