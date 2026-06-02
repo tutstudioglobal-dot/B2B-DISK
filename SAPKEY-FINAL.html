@@ -996,7 +996,7 @@ function confirmAction(text, callback, type) {
   _confirmCallback = callback;
 }
 function closeConfirm() { document.getElementById('confirmModal').classList.remove('show'); _confirmCallback = null; }
-function executeConfirm() { closeConfirm(); if (_confirmCallback) _confirmCallback(); }
+function executeConfirm() { var cb = _confirmCallback; closeConfirm(); if (cb) cb(); }
 // ===== CACHE & RELIABILITY =====
 function clearAppCache(){
   confirmAction('سيتم مسح جميع البيانات المحفوظة مؤقتًا وإعادة تحميل النظام بآخر التحديثات والإصدارات. هذا الإجراء آمن ولا يؤثر على بياناتك الأساسية.', function() {
