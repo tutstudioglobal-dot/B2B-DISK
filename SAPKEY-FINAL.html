@@ -1419,7 +1419,22 @@ DS_STEPS[9].meta = { detail: 'إذن استلام نهائي بعد اجتياز
 DS_STEPS[10].meta = { input: 'قيمة الصرف (ج.م):', field: 'amount', numeric: true, placeholder: 'المبلغ المستحق', detail: 'صرف قيمة التوريد بعد الاستلام النهائي. يتم إصدار أمر صرف للخزينة.', req: 'صرف القيمة المتفق عليها', warn: 'تأكد من توفر المستندات الكاملة للصرف' };
 DS_STEPS[11].meta = { detail: 'إغلاق أمر التوريد وأرشفة جميع المستندات والفواتير و محضر الاستلام.', req: 'أرشفة جميع مستندات التوريد' };
 
-// ===== TENDER STEP META =====
+// ===== TENDER STEPS + META =====
+var TENDER_STEPS = [
+  { label: 'إعلان', icon: 'fa-bullhorn', desc: 'نشر الإعلان ودعوة الموردين' },
+  { label: 'تقديم عروض', icon: 'fa-file-import', desc: 'استلام العروض الفنية والمالية' },
+  { label: 'فتح فني', icon: 'fa-folder-open', desc: 'فتح المظاريف الفنية ولجنة التقييم' },
+  { label: 'تقييم فني 60%', icon: 'fa-chart-bar', desc: 'تقييم فني شامل (معايير الجودة)' },
+  { label: 'فتح مالي', icon: 'fa-file-invoice-dollar', desc: 'فتح المظاريف المالية' },
+  { label: 'تقييم مالي 40%', icon: 'fa-calculator', desc: 'تقييم العروض المالية' },
+  { label: 'ترسية', icon: 'fa-trophy', desc: 'ترسية المناقصة' },
+  { label: 'توقيع عقد', icon: 'fa-file-signature', desc: 'توقيع العقد' },
+  { label: 'دفعة مقدمة', icon: 'fa-hand-holding-dollar', desc: 'صرف الدفعة المقدمة' },
+  { label: 'توريد وتنفيذ', icon: 'fa-hard-hat', desc: 'توريد المواد والتنفيذ' },
+  { label: 'دفع نهائي', icon: 'fa-money-bill-wave', desc: 'الصرف النهائي' },
+  { label: 'إغلاق', icon: 'fa-check-double', desc: 'إغلاق وأرشفة' }
+];
+var TENDER_STATUSES = ['إعلان', 'عروض', 'فتح فني', 'تقييم فني 60%', 'فتح مالي', 'تقييم مالي 40%', 'تم الترسية 🏆', 'توقيع عقد', 'دفعة مقدمة', 'توريد', 'دفع نهائي', 'مكتمل ✅'];
 TENDER_STEPS[0].meta = { detail: 'نشر الإعلان الرسمي للمناقصة ودعوة الموردين والمقاولين المؤهلين لتقديم عروضهم.', req: 'نشر الإعلان في الصحف والمنصات الرسمية', warn: 'تأكد من وضوح شروط المناقصة' };
 TENDER_STEPS[1].meta = { detail: 'استلام العروض الفنية والمالية من الموردين والمقاولين المهتمين.', req: 'استلام العروض قبل الموعد النهائي' };
 TENDER_STEPS[2].meta = { input: 'ملاحظات فتح العروض:', field: 'notes', placeholder: 'ملاحظات لجنة فتح العروض...', detail: 'فتح المظاريف الفنية بحضور لجنة التقييم وجميع المتنافسين.', req: 'فتح المظاريف وتوثيق المحضر' };
@@ -1525,21 +1540,6 @@ var tenders = JSON.parse(localStorage.getItem('sapkey_tenders') || '[]');
 function getTenders() { tenders = JSON.parse(localStorage.getItem('sapkey_tenders') || '[]'); return tenders; }
 function saveTenders() { localStorage.setItem('sapkey_tenders', JSON.stringify(tenders)); }
 function genTenderId() { return 'TND-' + String(Date.now()).slice(-5) + String(tenders.length + 1).padStart(3, '0'); }
-var TENDER_STEPS = [
-  { label: 'إعلان', icon: 'fa-bullhorn', desc: 'نشر الإعلان ودعوة الموردين' },
-  { label: 'تقديم عروض', icon: 'fa-file-import', desc: 'استلام العروض الفنية والمالية' },
-  { label: 'فتح فني', icon: 'fa-folder-open', desc: 'فتح المظاريف الفنية ولجنة التقييم' },
-  { label: 'تقييم فني 60%', icon: 'fa-chart-bar', desc: 'تقييم فني شامل (معايير الجودة)' },
-  { label: 'فتح مالي', icon: 'fa-file-invoice-dollar', desc: 'فتح المظاريف المالية' },
-  { label: 'تقييم مالي 40%', icon: 'fa-calculator', desc: 'تقييم العروض المالية' },
-  { label: 'ترسية', icon: 'fa-trophy', desc: 'ترسية المناقصة' },
-  { label: 'توقيع عقد', icon: 'fa-file-signature', desc: 'توقيع العقد' },
-  { label: 'دفعة مقدمة', icon: 'fa-hand-holding-dollar', desc: 'صرف الدفعة المقدمة' },
-  { label: 'توريد وتنفيذ', icon: 'fa-hard-hat', desc: 'توريد المواد والتنفيذ' },
-  { label: 'دفع نهائي', icon: 'fa-money-bill-wave', desc: 'الصرف النهائي' },
-  { label: 'إغلاق', icon: 'fa-check-double', desc: 'إغلاق وأرشفة' }
-];
-var TENDER_STATUSES = ['إعلان', 'عروض', 'فتح فني', 'تقييم فني 60%', 'فتح مالي', 'تقييم مالي 40%', 'تم الترسية 🏆', 'توقيع عقد', 'دفعة مقدمة', 'توريد', 'دفع نهائي', 'مكتمل ✅'];
 function createTender() {
   showInputModal('اسم الجهة / العميل:', '', function(client) {
     if (!client) return;
